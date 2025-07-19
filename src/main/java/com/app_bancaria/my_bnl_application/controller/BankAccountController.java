@@ -5,15 +5,16 @@ import com.app_bancaria.my_bnl_application.dto.BankAccountResponseDto;
 import com.app_bancaria.my_bnl_application.service.BankAccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bank-account")
 @RequiredArgsConstructor
+@Slf4j
 public class BankAccountController {
 
     //create
@@ -26,6 +27,12 @@ public class BankAccountController {
 
     @PostMapping("/create")
     public ResponseEntity<BankAccountResponseDto> create(@RequestBody @Valid BankAccountRequestDto request){
+        log.info("controller raggiunto");
         return ResponseEntity.ok(bankAccountService.create(request));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<BankAccountResponseDto>> getUserBankAccount(@PathVariable String userId){
+        return  ResponseEntity.ok(bankAccountService.getUserBankAccount(userId));
     }
 }

@@ -1,5 +1,7 @@
 package com.app_bancaria.my_bnl_application.dto;
 
+import com.app_bancaria.my_bnl_application.model.TipoConto;
+import com.app_bancaria.my_bnl_application.model.Valuta;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,5 +37,11 @@ public class BankAccountRequestDto {
     @NotNull(message = "Il saldo iniziale è obbligatorio")
     @DecimalMin(value = "0.00", inclusive = true, message = "Il saldo non può essere negativo")
     private BigDecimal saldo;
+
+    @NotNull(message = "Il tipo di conto è obbligatorio")
+    private TipoConto tipo;
+
+    @NotNull(message = "La valuta è obbligatoria")
+    private Valuta valuta;
 }
 

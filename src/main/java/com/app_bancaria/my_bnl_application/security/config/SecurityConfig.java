@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(exchange -> exchange
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/bank-account/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -46,6 +46,12 @@ public class BankAccount {
     @Column(nullable = false)
     private BigDecimal saldo;
 
+    @Enumerated(EnumType.STRING)
+    private TipoConto tipologia;
+
+    @Enumerated(EnumType.STRING)
+    private Valuta valuta;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
