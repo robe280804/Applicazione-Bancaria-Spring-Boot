@@ -47,6 +47,7 @@ public class AuthService {
 
         User savedUser =  userRepository.save(user);
         return AuthResponseDto.builder()
+                .id(savedUser.getId())
                 .email(savedUser.getEmail())
                 .message("Registrazione avvenuta cn successo")
                 .build();
@@ -70,6 +71,7 @@ public class AuthService {
                 userPrincipal.getId(), userPrincipal.getEmail(), userPrincipal.getAuthorities());
 
         return AuthResponseDto.builder()
+                .id(userPrincipal.getId())
                 .email(userPrincipal.getEmail())
                 .message("Login andato a buon fine")
                 .token(token)
