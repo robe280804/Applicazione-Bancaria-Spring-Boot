@@ -6,13 +6,11 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class BankAccountRequestDto {
 
@@ -34,7 +32,7 @@ public class BankAccountRequestDto {
     private BigDecimal saldo;
 
     @NotNull(message = "Il tipo di conto è obbligatorio")
-    private TipoConto tipo;
+    private TipoConto type;
 
     @NotNull(message = "La valuta è obbligatoria")
     private Valuta valuta;

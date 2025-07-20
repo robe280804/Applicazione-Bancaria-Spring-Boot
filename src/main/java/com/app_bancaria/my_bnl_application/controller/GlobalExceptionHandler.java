@@ -1,6 +1,8 @@
 package com.app_bancaria.my_bnl_application.controller;
 
 import com.app_bancaria.my_bnl_application.exception.EmailAlreadyExistsEx;
+import com.app_bancaria.my_bnl_application.exception.PasswordNotValidEx;
+import com.app_bancaria.my_bnl_application.exception.SaldoNonDisponibileEx;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -46,6 +48,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundEx(UsernameNotFoundException ex, WebRequest request){
         return generateResponse("Errore interno", ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(PasswordNotValidEx.class)
+    public ResponseEntity<Object> handlePasswordNonValidEx(PasswordNotValidEx ex, WebRequest request){
+        return generateResponse("Password errata", ex, HttpStatus.UNAUTHORIZED, request);
+    }
+
+    @ExceptionHandler(SaldoNonDisponibileEx.class)
+    public ResponseEntity<Object> handleSaldoNonDispoEx(SaldoNonDisponibileEx ex, WebRequest request){
+        return generateResponse("Saldo insufficiente", ex, HttpStatus.BAD_REQUEST, request);
     }
 
     private static ResponseEntity<Object> generateResponse(

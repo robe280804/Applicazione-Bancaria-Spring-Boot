@@ -2,6 +2,8 @@ package com.app_bancaria.my_bnl_application.controller;
 
 import com.app_bancaria.my_bnl_application.dto.BankAccountRequestDto;
 import com.app_bancaria.my_bnl_application.dto.BankAccountResponseDto;
+import com.app_bancaria.my_bnl_application.dto.TransazioneRequestDto;
+import com.app_bancaria.my_bnl_application.dto.TransazioneResponseDto;
 import com.app_bancaria.my_bnl_application.service.BankAccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +41,17 @@ public class BankAccountController {
         return ResponseEntity.ok(bankAccountService.getUserBankAccount());
     }
 
-    /*
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/deposita")
-    public ResponseEntity<TransazioneResponseDto> deposita(@RequestBody TransazioneRequestDto request){
+    public ResponseEntity<TransazioneResponseDto> deposita(@RequestBody @Valid TransazioneRequestDto request){
         return ResponseEntity.ok(bankAccountService.deposita(request));
     }
-    */
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/preleva")
+    public ResponseEntity<TransazioneResponseDto> preleva(@RequestBody @Valid TransazioneRequestDto request){
+        return ResponseEntity.ok(bankAccountService.preleva(request));
+    }
+
 
 }
