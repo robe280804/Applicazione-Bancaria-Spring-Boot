@@ -27,6 +27,7 @@ public class BankAccountResponseDto {
     private TipoConto tipologia;
     private Valuta valuta;
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
+    private String message;
 
 }

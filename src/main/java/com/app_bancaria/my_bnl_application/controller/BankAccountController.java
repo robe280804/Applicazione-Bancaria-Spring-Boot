@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,14 +26,24 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
     public ResponseEntity<BankAccountResponseDto> create(@RequestBody @Valid BankAccountRequestDto request){
         log.info("controller raggiunto");
         return ResponseEntity.ok(bankAccountService.create(request));
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<BankAccountResponseDto>> getUserBankAccount(@PathVariable String userId){
-        return  ResponseEntity.ok(bankAccountService.getUserBankAccount(userId));
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/")
+    public ResponseEntity<List<BankAccountResponseDto>> getUserBankAccount(){
+        return ResponseEntity.ok(bankAccountService.getUserBankAccount());
     }
+
+    /*
+    @PostMapping("/deposita")
+    public ResponseEntity<TransazioneResponseDto> deposita(@RequestBody TransazioneRequestDto request){
+        return ResponseEntity.ok(bankAccountService.deposita(request));
+    }
+    */
+
 }

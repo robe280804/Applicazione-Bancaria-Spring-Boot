@@ -37,8 +37,10 @@ public class User {
     private List<BankAccount> bankAccount;
 
     @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updateAt;
+    @Column(name = "update_at")
+    private LocalDateTime updatedAt;
 }

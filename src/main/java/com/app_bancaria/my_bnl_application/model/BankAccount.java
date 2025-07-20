@@ -34,7 +34,7 @@ public class BankAccount {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String codiceFiscale;
 
     @Column(nullable = false, unique = true)
@@ -53,10 +53,12 @@ public class BankAccount {
     private Valuta valuta;
 
     @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updateAt;
+    @Column(name = "update_at")
+    private LocalDateTime updatedAt;
 
      @PrePersist
      private void prePersist(){

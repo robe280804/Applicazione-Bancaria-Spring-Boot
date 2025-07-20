@@ -3,6 +3,7 @@ package com.app_bancaria.my_bnl_application.service;
 import com.app_bancaria.my_bnl_application.dto.AuthRequestDto;
 import com.app_bancaria.my_bnl_application.dto.AuthResponseDto;
 import com.app_bancaria.my_bnl_application.exception.EmailAlreadyExistsEx;
+import com.app_bancaria.my_bnl_application.model.Role;
 import com.app_bancaria.my_bnl_application.model.User;
 import com.app_bancaria.my_bnl_application.repository.UserRepository;
 import com.app_bancaria.my_bnl_application.security.jwt.JwtService;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -43,13 +45,16 @@ public class AuthService {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .roles(Set.of(Role.USER))
                 .build();
 
         User savedUser =  userRepository.save(user);
         return AuthResponseDto.builder()
                 .id(savedUser.getId())
                 .email(savedUser.getEmail())
-                .message("Registrazione avvenuta cn successo")
+                .message("Registrazione avvenuta con successo")
+                .createdAt(savedUser.getCreatedAt())
+                .updatedAt(savedUser.getUpdatedAt())
                 .build();
     }
 

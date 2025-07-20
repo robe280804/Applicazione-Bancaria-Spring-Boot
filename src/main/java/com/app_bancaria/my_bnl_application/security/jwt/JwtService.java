@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.security.Keys;
 
@@ -65,6 +66,11 @@ public class JwtService {
 
     public List<String> estraiAuthorities(String token) {
         return estraiAllClaims(token).get("authorities", List.class);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = estraiEmail(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     public Date estraiExpiration(String token){

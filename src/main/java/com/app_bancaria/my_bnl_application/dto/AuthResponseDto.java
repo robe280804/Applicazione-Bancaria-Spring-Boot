@@ -18,13 +18,13 @@ public class AuthResponseDto {
     private String message;
     private String token;
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
-    public AuthResponseDto(String id,String email, String message, LocalDateTime createdAt, LocalDateTime updateAt){
+    public AuthResponseDto(String id,String email, String message, LocalDateTime createdAt, LocalDateTime updatedAt){
         this.email = email;
         this.message = message;
         this.createdAt = createdAt;
-        this.updateAt = updateAt;
+        this.updatedAt = updatedAt;
         this.token = null;
     }
 }

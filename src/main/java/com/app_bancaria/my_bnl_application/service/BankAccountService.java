@@ -6,9 +6,14 @@ import com.app_bancaria.my_bnl_application.model.BankAccount;
 import com.app_bancaria.my_bnl_application.model.User;
 import com.app_bancaria.my_bnl_application.repository.BankAccountRepository;
 import com.app_bancaria.my_bnl_application.repository.UserRepository;
+import com.app_bancaria.my_bnl_application.security.model.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +31,14 @@ public class BankAccountService {
 
     @Transactional
     public BankAccountResponseDto create(@Valid BankAccountRequestDto request) {
-        log.info("[CREATE] Creazione conto bancario per {}", request.getUserId());
 
-        User user = userRepository.findById(request.getUserId())
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        String userId = userPrincipal.getId();
+
+        log.info("[CREATE] Creazione conto bancario per user con id {} e email {}", userId, userPrincipal.getEmail());
+
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User non trovato nel sistema"));
 
         BankAccount bankAccount = BankAccount.builder()
@@ -54,13 +64,19 @@ public class BankAccountService {
                 .tipologia(savedBankAccount.getTipologia())
                 .valuta(savedBankAccount.getValuta())
                 .createdAt(savedBankAccount.getCreatedAt())
-                .updateAt(savedBankAccount.getUpdateAt())
+                .updatedAt(savedBankAccount.getUpdatedAt())
+                .message("Creazione del conto bancario andata a buon fine")
                 .build();
     }
 
     @Transactional
-    public List<BankAccountResponseDto> getUserBankAccount(String userId) {
-        log.info("[GET USER ACCOUNTS] Visualizzazione conti bancari per {}", userId);
+    public List<BankAccountResponseDto> getUserBankAccount() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        String userId = userPrincipal.getId();
+
+        log.info("[VISUALIZZA CONTI] Ottieni conti bancari per user con id {} e email {}", userId, userPrincipal.getEmail());
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User non trovato nel sistema"));
@@ -79,7 +95,7 @@ public class BankAccountService {
                         .tipologia(bankAccount.getTipologia())
                         .valuta(bankAccount.getValuta())
                         .createdAt(bankAccount.getCreatedAt())
-                        .updateAt(bankAccount.getUpdateAt())
+                        .updatedAt(bankAccount.getUpdatedAt())
                         .build())
                 .toList();
     }

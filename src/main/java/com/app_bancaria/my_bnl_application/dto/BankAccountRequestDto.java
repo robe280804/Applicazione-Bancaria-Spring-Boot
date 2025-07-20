@@ -16,11 +16,6 @@ import java.math.BigDecimal;
 @Builder
 public class BankAccountRequestDto {
 
-    @NotBlank(message = "L'ID utente è obbligatorio")
-    @Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[1-5][0-9a-fA-F]{3}\\-[89abAB][0-9a-fA-F]{3}\\-[0-9a-fA-F]{12}$",
-            message = "L'ID utente deve essere un UUID valido")
-    private String userId;
-
     @NotBlank(message = "Il nome è obbligatorio")
     @Size(min = 2, max = 50, message = "Il nome deve contenere tra 2 e 50 caratteri")
     private String firstName;
