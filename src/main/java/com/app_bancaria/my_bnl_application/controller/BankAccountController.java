@@ -1,9 +1,6 @@
 package com.app_bancaria.my_bnl_application.controller;
 
-import com.app_bancaria.my_bnl_application.dto.BankAccountRequestDto;
-import com.app_bancaria.my_bnl_application.dto.BankAccountResponseDto;
-import com.app_bancaria.my_bnl_application.dto.TransazioneRequestDto;
-import com.app_bancaria.my_bnl_application.dto.TransazioneResponseDto;
+import com.app_bancaria.my_bnl_application.dto.*;
 import com.app_bancaria.my_bnl_application.service.BankAccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -51,6 +49,18 @@ public class BankAccountController {
     @PostMapping("/preleva")
     public ResponseEntity<TransazioneResponseDto> preleva(@RequestBody @Valid TransazioneRequestDto request){
         return ResponseEntity.ok(bankAccountService.preleva(request));
+    }
+
+    @PreAuthorize("hasRole('USER)")
+    @PostMapping("/bonifico")
+    public ResponseEntity<BonificoResponseDto> bonifico(@RequestBody @Valid BonificoRequestDto request){
+        return ResponseEntity.ok(bankAccountService.bonifico(request));
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/saldo/{idAccount}")
+    public ResponseEntity<BigDecimal> getSaldo(@PathVariable String idAccount){
+        return ResponseEntity.ok(bankAccountService.getSaldo(idAccount));
     }
 
 

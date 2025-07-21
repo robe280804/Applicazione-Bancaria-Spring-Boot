@@ -6,15 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @Builder
-public class TransazioneResponseDto {
+public class TransactionDto {
 
-    private String contoId;
-    private String iban;
+    private Long id;
+    private String motivation;
     private BigDecimal amount;
-    private BigDecimal saldoAttuale;
-    private String message;
+    private String bankAccountId;
+    private TransactionType type;
+    private LocalDateTime date;
 }

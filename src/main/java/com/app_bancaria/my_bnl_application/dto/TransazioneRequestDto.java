@@ -13,6 +13,10 @@ import java.math.BigDecimal;
 public class TransazioneRequestDto {
 
     @NotBlank(message = "L'ID del conto è obbligatorio")
+    @Pattern(
+            regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+            message = "L'idAccount deve essere un UUID valido"
+    )
     private String accountId;
 
     @NotNull(message = "L'importo è obbligatorio")

@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Data
@@ -22,9 +23,10 @@ public class BankAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "bank_account_id")
     private String id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -51,6 +53,9 @@ public class BankAccount {
 
     @Enumerated(EnumType.STRING)
     private Valuta valuta;
+
+    @OneToMany(mappedBy = "fromAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactions;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
