@@ -13,6 +13,18 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   secret: QzU2eXpQbW56N2JDUHlWRmtHbWhnQTRmZWR6YmhrVjE=
   expiration: 86400000

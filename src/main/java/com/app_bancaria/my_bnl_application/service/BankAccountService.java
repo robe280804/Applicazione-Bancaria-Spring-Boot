@@ -7,21 +7,16 @@ import com.app_bancaria.my_bnl_application.model.*;
 import com.app_bancaria.my_bnl_application.repository.BankAccountRepository;
 import com.app_bancaria.my_bnl_application.repository.TransactionsRepository;
 import com.app_bancaria.my_bnl_application.repository.UserRepository;
-import com.app_bancaria.my_bnl_application.security.model.UserPrincipal;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,6 +29,7 @@ public class BankAccountService {
     private final UserRepository userRepository;
     private final SecurityService securityService;
     private final TransactionsRepository transactionsRepository;
+    private final EmailSenderService emailSenderService;
 
     @Transactional
     public BankAccountResponseDto create(@Valid BankAccountRequestDto request) {
@@ -56,6 +52,12 @@ public class BankAccountService {
                 .build();
 
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+
+        /*   Invio Email Disabilitato
+        emailSenderService.sendEmail(user.getEmail(), String.format(
+                "Creazione del conto bancario con IBAN %s creato con successo", bankAccount.getIban()));
+        */
+
         return BankAccountResponseDto.builder()
                 .id(savedBankAccount.getId())
                 .userId(savedBankAccount.getUser().getId())
@@ -126,6 +128,12 @@ public class BankAccountService {
         bankAccount.setSaldo(bankAccount.getSaldo().add(request.getAmount()));
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
 
+        /* Invio Email disabilitato
+        emailSenderService.sendEmail(user.getEmail(), String.format(
+                "Deposito eseguito sul tuo conto %S di %,.2f %s",
+                bankAccount.getIban(), request.getAmount(), bankAccount.getValuta()));
+         */
+
         //Gestione transazione
         Transaction transaction = Transaction.builder()
                 .motivation(request.getMotivation())
@@ -172,6 +180,13 @@ public class BankAccountService {
 
         bankAccount.setSaldo(bankAccount.getSaldo().subtract(request.getAmount()));
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+
+        /* Invio Email disabilitato
+        emailSenderService.sendEmail(user.getEmail(), String.format(
+                "Prelievo eseguito sul tuo conto %S di %,.2f %s",
+                bankAccount.getIban(), request.getAmount(), bankAccount.getValuta()));
+
+         */
 
         Transaction transaction = Transaction.builder()
                 .motivation(request.getMotivation())
@@ -237,7 +252,7 @@ public class BankAccountService {
                 .motivation(request.getMotivation())
                 .amount(request.getAmount())
                 .fromAccount(bankAccount)
-                .type(TransactionType.BONIFICO)
+                .type(TransactionType.BONIFICO_INVIATO)
                 .date(LocalDateTime.now())
                 .build();
         transactionsRepository.save(bonificoEseguito);
@@ -250,18 +265,25 @@ public class BankAccountService {
                 .motivation(request.getMotivation())
                 .amount(request.getAmount())
                 .fromAccount(bankAccount)
-                .type(TransactionType.BONIFICO)
+                .type(TransactionType.BONIFICO_RICEVUTO)
                 .date(LocalDateTime.now())
                 .build();
 
         transactionsRepository.save(bonificoRicevuto);
 
+        /*Invio Email disabilitato
+        emailSenderService.sendEmail(user.getEmail(), String.format(
+                "Bonifico eseguito sul tuo conto %S al conto di %S di %,.2f %s",
+                bankAccount.getIban(), accountDestinatario.getIban(), request.getAmount(), bankAccount.getValuta()));
+         */
+
+
         return BonificoResponseDto.builder()
-                .id(bonificoEseguito.getId())
+                .id(bonificoRicevuto.getId())
                 .motivation(bonificoEseguito.getMotivation())
                 .amount(request.getAmount())
                 .bankAccountId(bankAccount.getId())
-                .type(TransactionType.BONIFICO)
+                .type(TransactionType.BONIFICO_RICEVUTO)
                 .date(LocalDateTime.now())
                 .ibanDestinatario(accountDestinatario.getIban())
                 .nomeDestinatario(accountDestinatario.getFirstName())
