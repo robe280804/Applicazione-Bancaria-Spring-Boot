@@ -25,7 +25,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    //non la metto not null altrimenti blocca il flusso logico dell'oAuth2
     @ToString.Exclude
     private String password;
 
@@ -36,6 +36,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccount> bankAccount;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

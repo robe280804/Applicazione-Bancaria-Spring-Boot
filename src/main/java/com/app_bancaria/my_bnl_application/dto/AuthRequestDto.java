@@ -1,9 +1,12 @@
 package com.app_bancaria.my_bnl_application.dto;
 
+import com.app_bancaria.my_bnl_application.model.Role;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Set;
 
 
 @Data
@@ -20,5 +23,7 @@ public class AuthRequestDto {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$",
             message = "La password deve contenere almeno una maiuscola, una minuscola, un numero e un carattere speciale")
     private String password;
+
+    private Set<Role> roles;
 
 }

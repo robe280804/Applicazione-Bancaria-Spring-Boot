@@ -1,5 +1,6 @@
 package com.app_bancaria.my_bnl_application.controller;
 
+import com.app_bancaria.my_bnl_application.exception.AccountAlreadyRegisteredOauth2Exception;
 import com.app_bancaria.my_bnl_application.exception.EmailAlreadyExistsEx;
 import com.app_bancaria.my_bnl_application.exception.PasswordNotValidEx;
 import com.app_bancaria.my_bnl_application.exception.SaldoNonDisponibileEx;
@@ -19,6 +20,12 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccountAlreadyRegisteredOauth2Exception.class)
+    public ResponseEntity<Object> handleAccountOauth2RegisterEx(AccountAlreadyRegisteredOauth2Exception ex,
+                                                                WebRequest request){
+        return generateResponse("Registrato con oAuth2", ex, HttpStatus.BAD_REQUEST, request);
+    }
 
     @ExceptionHandler(EmailAlreadyExistsEx.class)
     public ResponseEntity<Object> handleEmailAlreadyExistsEx(EmailAlreadyExistsEx ex, WebRequest request){

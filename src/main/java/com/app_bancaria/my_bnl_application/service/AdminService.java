@@ -1,10 +1,15 @@
 package com.app_bancaria.my_bnl_application.service;
 
+import com.app_bancaria.my_bnl_application.dto.BankAccountRequestDto;
+import com.app_bancaria.my_bnl_application.dto.BankAccountResponseDto;
 import com.app_bancaria.my_bnl_application.dto.UserResponseDto;
 import com.app_bancaria.my_bnl_application.dto.UserUpdateRequestDto;
+import com.app_bancaria.my_bnl_application.model.BankAccount;
 import com.app_bancaria.my_bnl_application.model.User;
+import com.app_bancaria.my_bnl_application.repository.BankAccountRepository;
 import com.app_bancaria.my_bnl_application.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +26,7 @@ import java.util.stream.Collectors;
 public class AdminService {
 
     private final UserRepository userRepository;
-    private final SecurityService securityService;
+    private final BankAccountRepository bankAccountRepository;
     private final PasswordEncoder encoder;
 
     @Transactional(readOnly = true)
@@ -71,5 +76,68 @@ public class AdminService {
                 .createdAt(userSalvato.getCreatedAt())
                 .updateAt(userSalvato.getUpdatedAt())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<BankAccountResponseDto> getBankAccounts() {
+        return bankAccountRepository.findAll().stream()
+                .map(bankAccount  -> BankAccountResponseDto.builder()
+                        .id(bankAccount.getId())
+                        .userId(bankAccount.getUser().getId())
+                        .firstName(bankAccount.getFirstName())
+                        .lastName(bankAccount.getLastName())
+                        .codiceFiscale(bankAccount.getCodiceFiscale())
+                        .iban(bankAccount.getIban())
+                        .numeroConto(bankAccount.getNumeroConto())
+                        .saldo(bankAccount.getSaldo())
+                        .type(bankAccount.getTipologia())
+                        .valuta(bankAccount.getValuta())
+                        .createdAt(bankAccount.getCreatedAt())
+                        .updatedAt(bankAccount.getUpdatedAt())
+                        .build())
+                .toList();
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public BankAccountResponseDto updateAccount(String id, @Valid BankAccountRequestDto request) {
+        BankAccount account = bankAccountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Conto bancario non trovato"));
+
+        log.info("[ADMIN] Aggiornamento dell'account con id {} e iban {}",
+                account.getId(), account.getIban());
+
+        account.setFirstName(request.getFirstName());
+        account.setLastName(request.getLastName());
+        account.setCodiceFiscale(request.getCodiceFiscale());
+        account.setSaldo(request.getSaldo());
+        account.setTipologia(request.getType());
+        account.setValuta(request.getValuta());
+
+        BankAccount bankAccount = bankAccountRepository.save(account);
+        return BankAccountResponseDto.builder()
+                .id(bankAccount.getId())
+                .userId(bankAccount.getUser().getId())
+                .firstName(bankAccount.getFirstName())
+                .lastName(bankAccount.getLastName())
+                .codiceFiscale(bankAccount.getCodiceFiscale())
+                .iban(bankAccount.getIban())
+                .numeroConto(bankAccount.getNumeroConto())
+                .saldo(bankAccount.getSaldo())
+                .type(bankAccount.getTipologia())
+                .valuta(bankAccount.getValuta())
+                .createdAt(bankAccount.getCreatedAt())
+                .updatedAt(bankAccount.getUpdatedAt())
+                .build();
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public void deleteAccount(String id) {
+        BankAccount account = bankAccountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Conto bancario non trovato"));
+
+        log.info("[ADMIN] Eliminazione dell account  con id {} e iban {}",
+                account.getId(), account.getIban());
+
+        bankAccountRepository.delete(account);
     }
 }

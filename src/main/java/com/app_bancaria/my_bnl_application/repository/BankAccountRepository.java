@@ -19,5 +19,6 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, String
     @Lock(LockModeType.PESSIMISTIC_WRITE)  //blocco la riga nel db interessata per evitate conflitti
     Optional<BankAccount> findByIdAndUserId(String idAccount, String idUser);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<BankAccount> findByIban(String iban);
 }

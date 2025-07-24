@@ -2,7 +2,9 @@ package com.app_bancaria.my_bnl_application.service;
 
 import com.app_bancaria.my_bnl_application.dto.AuthRequestDto;
 import com.app_bancaria.my_bnl_application.dto.AuthResponseDto;
+import com.app_bancaria.my_bnl_application.exception.AccountAlreadyRegisteredOauth2Exception;
 import com.app_bancaria.my_bnl_application.exception.EmailAlreadyExistsEx;
+import com.app_bancaria.my_bnl_application.model.AuthProvider;
 import com.app_bancaria.my_bnl_application.model.Role;
 import com.app_bancaria.my_bnl_application.model.User;
 import com.app_bancaria.my_bnl_application.repository.UserRepository;
@@ -33,6 +35,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    //REGISTRAZIONE
     @Transactional
     public AuthResponseDto register(AuthRequestDto request) {
         log.info("[REGISTER] Registrazione in esecuzione da {}", request.getEmail());
@@ -42,13 +45,36 @@ public class AuthService {
             throw new EmailAlreadyExistsEx("Email già registrata nel sistema, Riprova");
         }
 
+        if (request.getRoles().equals(Set.of(Role.ADMIN))){
+            User userAdmin = User.builder()
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .roles(request.getRoles())
+                    .authProvider(AuthProvider.LOCALE)
+                    .build();
+
+            User savedAdmin = userRepository.save(userAdmin);
+            log.info("[REGISTER] Admin registrato con email {} e ruoli {}", savedAdmin.getEmail(), savedAdmin.getRoles());
+
+            return AuthResponseDto.builder()
+                    .id(savedAdmin.getId())
+                    .email(savedAdmin.getEmail())
+                    .message("Registrazione Admin avvenuta con successo")
+                    .createdAt(savedAdmin.getCreatedAt())
+                    .updatedAt(savedAdmin.getUpdatedAt())
+                    .build();
+        }
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Set.of(Role.USER))
+                .authProvider(AuthProvider.LOCALE)
                 .build();
 
         User savedUser =  userRepository.save(user);
+        log.info("[REGISTER] User registrato con email {} e ruoli {}", savedUser.getEmail(), savedUser.getRoles());
+
         return AuthResponseDto.builder()
                 .id(savedUser.getId())
                 .email(savedUser.getEmail())
@@ -58,9 +84,16 @@ public class AuthService {
                 .build();
     }
 
+    //LOGIN
     @Transactional
     public AuthResponseDto login(AuthRequestDto request) {
         log.info("[LOGIN] Login in esecuzione da {}", request.getEmail());
+        //Nego il login a chi è gia autenticato con oAuth2
+        Optional<User> oAuth2User = userRepository.findByEmail(request.getEmail());
+        if (oAuth2User.isPresent() && oAuth2User.get().getAuthProvider() != AuthProvider.LOCALE) {
+            throw new AccountAlreadyRegisteredOauth2Exception("Account già registrato attraverso "
+                    + oAuth2User.get().getAuthProvider());
+        }
         Authentication authentication;
         try {
              authentication = authenticationManager.authenticate(
@@ -74,6 +107,8 @@ public class AuthService {
 
         String token = jwtService.generateToken(
                 userPrincipal.getId(), userPrincipal.getEmail(), userPrincipal.getAuthorities());
+
+        log.info("[LOGIN] Login eseguito per {}, token generato {}", userPrincipal.getEmail(), token);
 
         return AuthResponseDto.builder()
                 .id(userPrincipal.getId())

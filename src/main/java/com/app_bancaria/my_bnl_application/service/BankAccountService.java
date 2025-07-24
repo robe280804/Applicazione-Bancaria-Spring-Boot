@@ -104,11 +104,7 @@ public class BankAccountService {
                 .toList();
     }
 
-    //forzo il rollback sull'eccezioni che non estendono RunTimeEx (altrimenti annullano le modifiche in automatico)
-    @Transactional(
-            isolation = Isolation.REPEATABLE_READ,
-            rollbackFor = {PasswordNotValidEx.class, EntityNotFoundException.class}
-    )
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public TransazioneResponseDto deposita(TransazioneRequestDto request) {
 
         String userId = securityService.getCurrentUserId();
@@ -154,10 +150,7 @@ public class BankAccountService {
                 .build();
     }
 
-    @Transactional(
-            rollbackFor = {PasswordNotValidEx.class, SaldoNonDisponibileEx.class, EntityNotFoundException.class},
-            isolation = Isolation.REPEATABLE_READ
-    )
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public TransazioneResponseDto preleva(TransazioneRequestDto request) {
 
         String userId = securityService.getCurrentUserId();
@@ -219,10 +212,7 @@ public class BankAccountService {
         return bankAccount.getSaldo();
     }
 
-    @Transactional(
-            rollbackFor = {PasswordNotValidEx.class, SaldoNonDisponibileEx.class, EntityNotFoundException.class},
-            isolation = Isolation.REPEATABLE_READ
-    )
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public BonificoResponseDto bonifico(@Valid BonificoRequestDto request) {
         String userId = securityService.getCurrentUserId();
 
@@ -276,7 +266,6 @@ public class BankAccountService {
                 "Bonifico eseguito sul tuo conto %S al conto di %S di %,.2f %s",
                 bankAccount.getIban(), accountDestinatario.getIban(), request.getAmount(), bankAccount.getValuta()));
          */
-
 
         return BonificoResponseDto.builder()
                 .id(bonificoRicevuto.getId())

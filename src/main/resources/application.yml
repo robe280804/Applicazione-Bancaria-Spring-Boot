@@ -1,12 +1,14 @@
-spring:
+server:
+  port: 3000
 
+spring:
   application:
     name: my-bnl-application
 
   datasource:
     url: jdbc:mysql://localhost:3306/app_bnl_spring_boot
     username: root
-    password: BERENICEroberto*04
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -25,8 +27,19 @@ spring:
           starttls:
             enable: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: ${GOOGLE_REDIRECT_URI}
+
 jwt:
   secret: QzU2eXpQbW56N2JDUHlWRmtHbWhnQTRmZWR6YmhrVjE=
   expiration: 86400000
+
+
 
 

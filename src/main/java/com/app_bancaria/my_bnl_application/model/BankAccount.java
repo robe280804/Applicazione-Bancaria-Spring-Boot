@@ -76,7 +76,7 @@ public class BankAccount {
      }
 
     private String generateIban() {
-        // Esempio semplificato: "IT" + 2 cifre controllo + 22 cifre randomiche
+        // "IT" + 2 cifre controllo + 22 cifre random
         String countryCode = "IT";
         String checkDigits = String.format("%02d", ThreadLocalRandom.current().nextInt(10, 99));
         StringBuilder sb = new StringBuilder();
@@ -88,7 +88,7 @@ public class BankAccount {
     }
 
     private String generateNumeroConto() {
-        // Esempio: numero conto a 10 cifre casuali
+        //numero conto a 10 cifre random
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             sb.append(ThreadLocalRandom.current().nextInt(0, 10));

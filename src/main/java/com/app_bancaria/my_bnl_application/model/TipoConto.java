@@ -4,5 +4,6 @@ public enum TipoConto {
     CORRENTE,
     RISPARMIO,
     AZIENDALE,
-    INVESTIMENTO
+    INVESTIMENTO,
+    ALTRO
 }
