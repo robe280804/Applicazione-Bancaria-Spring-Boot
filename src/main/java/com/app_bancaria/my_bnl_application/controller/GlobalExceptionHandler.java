@@ -4,6 +4,7 @@ import com.app_bancaria.my_bnl_application.exception.AccountAlreadyRegisteredOau
 import com.app_bancaria.my_bnl_application.exception.EmailAlreadyExistsEx;
 import com.app_bancaria.my_bnl_application.exception.PasswordNotValidEx;
 import com.app_bancaria.my_bnl_application.exception.SaldoNonDisponibileEx;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +22,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundEx(EntityNotFoundException ex, WebRequest request){
+        return generateResponse("Entita non trovata", ex, HttpStatus.NOT_FOUND, request);
+    }
+
     @ExceptionHandler(AccountAlreadyRegisteredOauth2Exception.class)
     public ResponseEntity<Object> handleAccountOauth2RegisterEx(AccountAlreadyRegisteredOauth2Exception ex,
                                                                 WebRequest request){
@@ -29,11 +35,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsEx.class)
     public ResponseEntity<Object> handleEmailAlreadyExistsEx(EmailAlreadyExistsEx ex, WebRequest request){
-        return generateResponse("Email già registrata", ex, HttpStatus.BAD_REQUEST, request);
+        return generateResponse("Email già registrata", ex, HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object> handleBadCCredentialsEx(EmailAlreadyExistsEx ex, WebRequest request){
+    public ResponseEntity<Object> handleBadCCredentialsEx(BadCredentialsException ex, WebRequest request){
         return generateResponse("Credenziali errate", ex, HttpStatus.UNAUTHORIZED, request);
     }
 
@@ -54,7 +60,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundEx(UsernameNotFoundException ex, WebRequest request){
-        return generateResponse("Errore interno", ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return generateResponse("Errore interno", ex, HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(PasswordNotValidEx.class)
@@ -64,7 +70,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SaldoNonDisponibileEx.class)
     public ResponseEntity<Object> handleSaldoNonDispoEx(SaldoNonDisponibileEx ex, WebRequest request){
-        return generateResponse("Saldo insufficiente", ex, HttpStatus.BAD_REQUEST, request);
+        return generateResponse("Saldo insufficiente", ex, HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 
     private static ResponseEntity<Object> generateResponse(
