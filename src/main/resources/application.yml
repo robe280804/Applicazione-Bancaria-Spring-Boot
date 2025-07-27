@@ -37,7 +37,7 @@ spring:
             redirect-uri: ${GOOGLE_REDIRECT_URI}
 
 jwt:
-  secret: QzU2eXpQbW56N2JDUHlWRmtHbWhnQTRmZWR6YmhrVjE=
+  secret: ${JWT_SECRET}
   expiration: 86400000
 
 

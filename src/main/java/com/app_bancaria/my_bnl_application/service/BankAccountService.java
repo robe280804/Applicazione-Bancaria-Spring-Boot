@@ -52,6 +52,8 @@ public class BankAccountService {
                 .build();
 
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+        bankAccountRepository.flush();
+        log.info("[CREATE] Conto bancario con id {} creato con successo", savedBankAccount.getId());
 
         /*   Invio Email Disabilitato
         emailSenderService.sendEmail(user.getEmail(), String.format(
@@ -106,6 +108,7 @@ public class BankAccountService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public TransazioneResponseDto deposita(TransazioneRequestDto request) {
+        log.info("[DEPOSITO] Chiamata al metodo di deposito");
 
         String userId = securityService.getCurrentUserId();
 
@@ -115,8 +118,6 @@ public class BankAccountService {
         if (!securityService.verifyPassword(user, request.getPassword())) {
             throw new PasswordNotValidEx("Password errata");
         }
-
-        log.info("[DEPOSITO] Utente {} deposita {} su conto {}", userId, request.getAmount(), request.getAccountId());
 
         BankAccount bankAccount = bankAccountRepository.findByIdAndUserId(request.getAccountId(), userId)
                 .orElseThrow(() -> new EntityNotFoundException("Conto non trovato per questo utente"));
@@ -129,6 +130,8 @@ public class BankAccountService {
                 "Deposito eseguito sul tuo conto %S di %,.2f %s",
                 bankAccount.getIban(), request.getAmount(), bankAccount.getValuta()));
          */
+
+        log.info("[DEPOSITO] Utente {} deposita {} su conto {}", userId, request.getAmount(), request.getAccountId());
 
         //Gestione transazione
         Transaction transaction = Transaction.builder()
@@ -152,6 +155,7 @@ public class BankAccountService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public TransazioneResponseDto preleva(TransazioneRequestDto request) {
+        log.info("[PRELEVA] Chiamata al metodo preleva");
 
         String userId = securityService.getCurrentUserId();
 
@@ -162,8 +166,6 @@ public class BankAccountService {
             throw new PasswordNotValidEx("Password errata");
         }
 
-        log.info("[PRELIEVO] Utente {} preleva {} su conto {}", userId, request.getAmount(), request.getAccountId());
-
         BankAccount bankAccount = bankAccountRepository.findByIdAndUserId(request.getAccountId(), userId)
                 .orElseThrow(() -> new EntityNotFoundException("Conto non trovato per questo utente"));
 
@@ -173,6 +175,8 @@ public class BankAccountService {
 
         bankAccount.setSaldo(bankAccount.getSaldo().subtract(request.getAmount()));
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+
+        log.info("[PRELEVA] Utente {} preleva {} su conto {}", userId, request.getAmount(), request.getAccountId());
 
         /* Invio Email disabilitato
         emailSenderService.sendEmail(user.getEmail(), String.format(
@@ -266,13 +270,14 @@ public class BankAccountService {
                 "Bonifico eseguito sul tuo conto %S al conto di %S di %,.2f %s",
                 bankAccount.getIban(), accountDestinatario.getIban(), request.getAmount(), bankAccount.getValuta()));
          */
+        log.info("[BONIFICO] Bonifico eseguito da {} di {}", user.getEmail(), request.getAmount());
 
         return BonificoResponseDto.builder()
-                .id(bonificoRicevuto.getId())
+                .id(bonificoEseguito.getId())
                 .motivation(bonificoEseguito.getMotivation())
                 .amount(request.getAmount())
                 .bankAccountId(bankAccount.getId())
-                .type(TransactionType.BONIFICO_RICEVUTO)
+                .type(TransactionType.BONIFICO_INVIATO)
                 .date(LocalDateTime.now())
                 .ibanDestinatario(accountDestinatario.getIban())
                 .nomeDestinatario(accountDestinatario.getFirstName())

@@ -40,7 +40,7 @@ public class BankAccountController {
                     "Se l'utente attraverso l'id non viene trovato nel sistema, restituisce un errore 404.",
             responses = {
                     @ApiResponse(
-                            responseCode = "200",
+                            responseCode = "201",
                             description = "Conto  bancario creato con successo",
                             content = @Content(
                                     mediaType = "application/json",
@@ -70,7 +70,7 @@ public class BankAccountController {
     @PostMapping("/create")
     public ResponseEntity<BankAccountResponseDto> create(@RequestBody @Valid BankAccountRequestDto request){
         log.info("controller raggiunto");
-        return ResponseEntity.ok(bankAccountService.create(request));
+        return ResponseEntity.status(201).body(bankAccountService.create(request));
     }
 
 

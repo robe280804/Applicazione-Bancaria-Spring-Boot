@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @Builder
-
 @Schema(name = "BankAccountRequestDto", description = "DTO per la richiesta della creazione del conto bancario")
 public class BankAccountRequestDto {
 

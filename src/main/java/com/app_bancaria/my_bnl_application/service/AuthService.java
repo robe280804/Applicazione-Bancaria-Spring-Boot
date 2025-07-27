@@ -73,7 +73,8 @@ public class AuthService {
                 .build();
 
         User savedUser =  userRepository.save(user);
-        log.info("[REGISTER] User registrato con email {} e ruoli {}", savedUser.getEmail(), savedUser.getRoles());
+        userRepository.flush();
+        log.info("[REGISTER] User registrato con email {} e ruoli {} e {}", savedUser.getEmail(), savedUser.getRoles(), savedUser);
 
         return AuthResponseDto.builder()
                 .id(savedUser.getId())

@@ -25,8 +25,9 @@ public class TransactionService {
     private final TransactionsRepository transactionsRepository;
     private final BankAccountRepository bankAccountRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<TransactionDto> getTransactions(String accountId) {
+        log.info("[TRANSAZIONI] Visualizzazione delle transazioni dell'account con id {}", accountId);
         String userId = securityService.getCurrentUserId();
 
         BankAccount bankAccount = bankAccountRepository.findByIdAndUserId(accountId, userId)
@@ -46,8 +47,9 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<TransactionDto> getTransactionsByType(@Valid TransactionsRequestDto request) {
+        log.info("[TRANSAZIONI] Visualizzazione delle transazioni filtrate dell'account con id {}",request.getIdAccount());
         String userId = securityService.getCurrentUserId();
 
         BankAccount bankAccount = bankAccountRepository.findByIdAndUserId(request.getIdAccount(), userId)

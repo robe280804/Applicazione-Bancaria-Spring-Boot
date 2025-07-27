@@ -11,16 +11,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class Oauth2AuthSuccessHandler implements AuthenticationSuccessHandler {
@@ -34,7 +34,7 @@ public class Oauth2AuthSuccessHandler implements AuthenticationSuccessHandler {
                                          HttpServletResponse response,
                                          Authentication auth) throws IOException {
 
-        log.info("[OAUTH2] POST AUTENTICAZIONE ");
+        log.info("[OAUTH2] Handler oAuth2 in esecuzione ");
 
         DefaultOAuth2User oAuth2User = (DefaultOAuth2User) auth.getPrincipal();
         String email = oAuth2User.getAttribute("email");
@@ -60,10 +60,16 @@ public class Oauth2AuthSuccessHandler implements AuthenticationSuccessHandler {
         String token = jwtService.generateToken(
                 userExist.getId(), userExist.getEmail(), userExist.getAuthorities());
 
-        log.info("[OAUTH2] Token generato {}", token);
+        log.info("[OAUTH2] Handler oAuth2 Token generato {}", token);
 
-        // Invia il token al client, redirect con token nel query param
-        //lo gestisco poi nel frontend mettendolo negli header
-        response.sendRedirect("http://localhost:8000/oauth2/success?token=" + token);
+        // Imposta header e content-type per JSON
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        // Scrivi direttamente il token nella response
+        String jsonResponse = "{\"token\":\"" + token + "\"}";
+        response.getWriter().write(jsonResponse);
+        response.getWriter().flush();
     }
 }
