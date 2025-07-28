@@ -1,0 +1,608 @@
+{
+	"info": {
+		"_postman_id": "15be22af-b5a4-46ad-956e-ce36a99c7107",
+		"name": "BNL App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45937071"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "useBrowser",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8181/realms/fitness-oauth2/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:8181/realms/fitness-oauth2/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "new-fiitness-app-token-2",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:5173",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "oauth2-pkce-client",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"robertosodini1@gmail.com\",\r\n    \"password\": \"BERErobe*04\",\r\n    \"roles\": []\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"robertosodini1@gmail.com\",\r\n    \"password\": \"BERErobe*04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bank Account",
+			"item": [
+				{
+					"name": "Bank Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmODczMDBmYS1lOGY2LTQ1ZjQtODJhYi1lNWY2Yzg5NWI1MmYiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJyb2JlcnRvc29kaW5pMUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDIxMTksImV4cCI6MTc1MzcyODUxOX0.FAgW8O--Oh1I7qegqwj9jvYJf81NSrlNg36djdjjNKI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Roberto\",\r\n  \"lastName\": \"Sodini\",\r\n  \"codiceFiscale\": \"SDNRRT04M28G843D\",\r\n  \"saldo\": 1000.00,\r\n  \"type\": \"AZIENDALE\",\r\n  \"valuta\": \"EUR\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bank-account/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bank-account",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Bank Accounts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmODczMDBmYS1lOGY2LTQ1ZjQtODJhYi1lNWY2Yzg5NWI1MmYiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJyb2JlcnRvc29kaW5pMUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDIxMTksImV4cCI6MTc1MzcyODUxOX0.FAgW8O--Oh1I7qegqwj9jvYJf81NSrlNg36djdjjNKI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bank-account/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bank-account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deposita",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmODczMDBmYS1lOGY2LTQ1ZjQtODJhYi1lNWY2Yzg5NWI1MmYiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJyb2JlcnRvc29kaW5pMUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDIxMTksImV4cCI6MTc1MzcyODUxOX0.FAgW8O--Oh1I7qegqwj9jvYJf81NSrlNg36djdjjNKI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accountId\": \"fbc95dbc-4bfe-460b-9f87-0897ca7d2b61\",\r\n  \"amount\": 150.50,\r\n  \"password\": \"BERErobe*04\",\r\n  \"motivation\": \"Deposito mensile stipendio\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bank-account/deposita",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bank-account",
+								"deposita"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Preleva",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5ZDM5ODYyNy0zNDFlLTQ3YjctYjNmNC04NjNmOTdiNjRjMzUiLCJhdXRob3JpdGllcyI6WyJST0xFX1JPTEVfVVNFUiJdLCJlbWFpbCI6InJvYmVydG9zb2RpbmkxQGdtYWlsLmNvbSIsImlhdCI6MTc1Mjk5OTczMiwiZXhwIjoxNzUzMDg2MTMyfQ.Y_cQdVp2g72wKinJVB4wuIcwPDqr08FvfIV4Ql2saqo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accountId\": \"6b7b1736-4320-4cf4-b621-521af9a3cad8\",\r\n  \"amount\": 150.50,\r\n  \"password\": \"BERErobe*04\",\r\n  \"motivation\": \"Prelievo mensile stipendio\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bank-account/preleva",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bank-account",
+								"preleva"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bonifico",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmODczMDBmYS1lOGY2LTQ1ZjQtODJhYi1lNWY2Yzg5NWI1MmYiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJyb2JlcnRvc29kaW5pMUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDIxMTksImV4cCI6MTc1MzcyODUxOX0.FAgW8O--Oh1I7qegqwj9jvYJf81NSrlNg36djdjjNKI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"BERErobe*04\",\r\n    \"motivation\": \"Bonifico per saldare una spesa\",\r\n    \"amount\": \"20\",\r\n    \"bankAccountId\": \"a2c92c27-cda8-4d08-be20-7748ae9d6d98\",\r\n    \"ibanDestinatario\": \"IT49104588121010605989560\",\r\n    \"nomeDestinatario\": \"Filippo\",\r\n    \"cognomeDestinatario\": \"Sodini\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bank-account/bonifico",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bank-account",
+								"bonifico"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "account transaction",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmODczMDBmYS1lOGY2LTQ1ZjQtODJhYi1lNWY2Yzg5NWI1MmYiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJyb2JlcnRvc29kaW5pMUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDIxMTksImV4cCI6MTc1MzcyODUxOX0.FAgW8O--Oh1I7qegqwj9jvYJf81NSrlNg36djdjjNKI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/transaction/fbc95dbc-4bfe-460b-9f87-0897ca7d2b61",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"transaction",
+								"fbc95dbc-4bfe-460b-9f87-0897ca7d2b61"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter transaction",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmODczMDBmYS1lOGY2LTQ1ZjQtODJhYi1lNWY2Yzg5NWI1MmYiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJyb2JlcnRvc29kaW5pMUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDIxMTksImV4cCI6MTc1MzcyODUxOX0.FAgW8O--Oh1I7qegqwj9jvYJf81NSrlNg36djdjjNKI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idAccount\": \"d65a9f1d-e399-4bfc-a740-f47173d66342\",\r\n    \"transactionType\": \"DEPOSITO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/transaction/byType",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"transaction",
+								"byType"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get users",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzOTA2MjcyMi05NGViLTQxMmMtYmQwMi1mNDI3YTdkZTE4ZjciLCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImVtYWlsIjoicm9iZXJ0b3NvZGluaUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDI2OTgsImV4cCI6MTc1MzcyOTA5OH0.4sFhWLdKiWyq-NobPsNAyMZgwNswz996xBHfyWwt32I",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/admin/users/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"admin",
+										"users",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete user",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzOTA2MjcyMi05NGViLTQxMmMtYmQwMi1mNDI3YTdkZTE4ZjciLCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImVtYWlsIjoicm9iZXJ0b3NvZGluaUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDI2OTgsImV4cCI6MTc1MzcyOTA5OH0.4sFhWLdKiWyq-NobPsNAyMZgwNswz996xBHfyWwt32I",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/admin/users/delete/0cc96cd2-def6-4667-9f7d-9dca651221da",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"admin",
+										"users",
+										"delete",
+										"0cc96cd2-def6-4667-9f7d-9dca651221da"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update user",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzOTA2MjcyMi05NGViLTQxMmMtYmQwMi1mNDI3YTdkZTE4ZjciLCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImVtYWlsIjoicm9iZXJ0b3NvZGluaUBnbWFpbC5jb20iLCJpYXQiOjE3NTM2NDI2OTgsImV4cCI6MTc1MzcyOTA5OH0.4sFhWLdKiWyq-NobPsNAyMZgwNswz996xBHfyWwt32I",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"robertosodini20@gmail.com\",\r\n    \"password\": \"BERENICEroberto*04\",\r\n    \"role\": [\"USER\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/admin/users/update/89cd3c56-1ebb-4ad9-8936-8f756833fb39",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"admin",
+										"users",
+										"update",
+										"89cd3c56-1ebb-4ad9-8936-8f756833fb39"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Bank Account",
+					"item": [
+						{
+							"name": "Get account",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzYmYxMjEzMC0yN2FhLTQ2NDAtODY2NC1lZmNhODUyODZmMDAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiZW1haWwiOiJyb2JlcnRvc29kaW5pMUBnbWFpbC5jb20iLCJpYXQiOjE3NTMwODc4NzcsImV4cCI6MTc1MzE3NDI3N30.ZG1xyVFXkzhgeQv1aR3Hw9IV77ckRA0L1EaAGd8nUm4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/admin/bank-account",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"admin",
+										"bank-account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete account",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/admin/bank-account/c1d38004-8f7f-4882-8b28-cba7da6965fa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"admin",
+										"bank-account",
+										"c1d38004-8f7f-4882-8b28-cba7da6965fa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update account",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"robertosodini2@gmail.com\",\r\n    \"password\": \"BERENICEroberto*04\",\r\n    \"role\": [\"USER\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/admin/bank-account/c1d38004-8f7f-4882-8b28-cba7da6965fa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"admin",
+										"bank-account",
+										"c1d38004-8f7f-4882-8b28-cba7da6965fa"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
